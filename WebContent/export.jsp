@@ -15,13 +15,7 @@
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
 
-<h1>Import product catalogs</h1>
-	<form action=<%= response.encodeURL("controllerservlet?action="+Constants.ACTION_STORE_CATALOG)%> method="post" enctype="multipart/form-data">
-	<!-- <input type="hidden" name="action" value="store_catalog"> -->
-	   <p>
-		Select a file : <input type="file" name="Datei"/>
-	   </p>
-	   <input type="submit" value="import" />
-	</form>	
+<p>Export entire product catalog or just some products</p>
+	
 </body>
 </html>
