@@ -4,6 +4,7 @@ public class Constants {
 	public static final String ACTION_IMPORT = "import";
 	public static final String ACTION_EXPORT = "export";
 	public static final String ACTION_STORE_CATALOG = "store_catalog";
+	public static final String ACTION_CREATE_XML = "create_xml";
 	// XML schemata files
 	public static final String XML_SCHEMA_BMECAT = "bmecat_new_catalog_1_2_simple_eps_V0.96.xsd";
 	public static final String XML_SCHEMA_OPENTRANS = "openTRANS_1_0.xsd";

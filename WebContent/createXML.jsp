@@ -15,12 +15,7 @@
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
 
-<p>Export entire product catalog or just some products</p>
-	
-<form action=<%= response.encodeURL("controllerservlet?action="+Constants.ACTION_CREATE_XML)%> method="post" enctype="multipart/form-data">
-	<!-- <input type="hidden" name="action" value="store_catalog"> -->
-	   <input type="submit" value="create_XML" />
-</form>	
-
+<p>XML successfully created</p>
+		
 </body>
 </html>
