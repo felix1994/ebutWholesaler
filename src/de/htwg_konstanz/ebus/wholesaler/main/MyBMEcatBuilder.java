@@ -1,6 +1,7 @@
 package de.htwg_konstanz.ebus.wholesaler.main;
 
 import java.io.File;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,6 +15,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
+import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 public class MyBMEcatBuilder {
 
@@ -39,6 +43,7 @@ public class MyBMEcatBuilder {
 			Element catalog = doc.createElement("CATALOG");
 			header.appendChild(catalog);
 			
+			// konstant setzten 
 			Element language = doc.createElement("LANGUAGE");
 			catalog.appendChild(language);
 			
@@ -60,10 +65,34 @@ public class MyBMEcatBuilder {
 			Element t_new_catalog = doc.createElement("T_NEW_CATALOG");
 			bmecat.appendChild(t_new_catalog);
 			
-			// for articles in db
-			Element article = doc.createElement("ARTICLE");
-			t_new_catalog.appendChild(article);
+			ProductBOA pboa = ProductBOA.getInstance();
+			List<BOProduct> articles = pboa.findAll();
 			
+			for (BOProduct a : articles) {
+				Element article = doc.createElement("ARTICLE");
+				t_new_catalog.appendChild(article);
+				
+				Element supplier_aid = doc.createElement("SUPPLIER_AID");
+				article.appendChild(supplier_aid);
+				// manufacturer equals supplier_aid?!?!
+				supplier_aid.setNodeValue(a.getManufacturer());
+				
+				Element article_details = doc.createElement("ARTICLE_DETAILS");
+				article.appendChild(article_details);
+				
+				Element description_short = doc.createElement("DESCRIPTION_SHORT");
+				article_details.appendChild(description_short);
+				description_short.setNodeValue(a.getShortDescription());
+				
+				Element description_long = doc.createElement("DESCRIPTION_LONG");
+				article_details.appendChild(description_long);
+				description_long.setNodeValue(a.getLongDescription());
+				
+				Element ean = doc.createElement("EAN");
+				article_details.appendChild(ean);
+				// ean.setNodeValue();
+				
+			}
 			
 			TransformerFactory tFactory = TransformerFactory.newInstance();
 			Transformer t = tFactory.newTransformer();
