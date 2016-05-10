@@ -19,7 +19,7 @@
 	<form action=<%= response.encodeURL("controllerservlet?action="+Constants.ACTION_STORE_CATALOG)%> method="post" enctype="multipart/form-data">
 	<!-- <input type="hidden" name="action" value="store_catalog"> -->
 	   <p>
-		Select a file : <input type="file" name="Datei"/>
+		Select a file : <input type="file" name="Datei"  accept="application/xml"/>
 	   </p>
 	   <input type="submit" value="import" />
 	</form>	
