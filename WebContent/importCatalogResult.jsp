@@ -15,26 +15,36 @@
 <%@ include file="authentication.jsp" %>
 <%@ include file="navigation.jspfragment" %>
 
-<c:set var="parser" value="${sessionScope.store_catalog}"/>						
-<jsp:useBean id="parser" type="de.htwg_konstanz.ebus.wholesaler.main.MyBMEcatParser" />
+<c:set var="importInfo" value="${sessionScope.store_catalog}"/>						
+<jsp:useBean id="importInfo" type="de.htwg_konstanz.ebus.wholesaler.main.ImportInformation" />
 
 <c:choose>
-  <c:when test="${parser.valid == true}">
-    <table class="detail-view">
-		<tr>
-			<td class="label">Number of articles found in your catalog: </td>
-			<td>${parser.articlesFound}</td>
-		</tr>
-		<tr>
-			<td class="label">Number of articles added to our database: </td>
-			<td>${parser.articlesAddedToDatabase}</td>
-		</tr>
-	</table>
+  <c:when test="${importInfo.wellformed == false}">
+	<p>Could not import your product catalog.</p>
+    <p>Your xml file must be wellformed.</p>
   </c:when>
   <c:otherwise>
-  	<p>Could not import your product catalog.</p>
-    <p>Your xml file must be wellformed and valid.</p>
+ 	<c:choose>
+ 		<c:when test="${importInfo.valid == false}">
+ 			<p>Could not import your product catalog.</p>
+    		<p>Your xml file is wellformed but NOT valid.</p>
+ 		</c:when>
+ 		<c:otherwise>
+ 			<c:choose>
+		 		<c:when test="${importInfo.supplierFound == false}">
+		 			<p>Could not import your product catalog.</p>
+    				<p>Database does not contain the SUPPLIER_NAME of your catalog</p>
+		 		</c:when>
+		 		<c:otherwise>
+		 			<p>Number of articles found in your catalog:</p>
+				    <p>${importInfo.articlesFound}</p>
+				    <p>Number of articles added to our database: </p>
+				    <p>${importInfo.articlesAddedToDatabase}</p>
+		 		</c:otherwise>
+		 	</c:choose>
+ 		</c:otherwise>
+ 	</c:choose>
   </c:otherwise>
 </c:choose>
-</body>
+</body>	
 </html>

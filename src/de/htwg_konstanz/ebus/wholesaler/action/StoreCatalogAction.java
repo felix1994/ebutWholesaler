@@ -20,11 +20,13 @@ import org.xml.sax.SAXException;
 
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
+import de.htwg_konstanz.ebus.wholesaler.main.ImportInformation;
 import de.htwg_konstanz.ebus.wholesaler.main.MyBMEcatParser;
 
 public class StoreCatalogAction implements IAction {
 
 	private static File file;
+	private static ImportInformation importInfo;
 
 	public StoreCatalogAction() {
 		super();
@@ -48,6 +50,9 @@ public class StoreCatalogAction implements IAction {
 			request.setAttribute("message", "There was an error: " + ex.getMessage());
 		}
 
+		// Initialize ImportInfo class
+		importInfo = new ImportInformation();
+
 		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = null;
 		Document document = null;
@@ -56,23 +61,19 @@ public class StoreCatalogAction implements IAction {
 			document = builder.parse(stream);
 			stream.close();
 		} catch (ParserConfigurationException | IOException e) {
-			// TODO ########################
+			importInfo.setIoException(true);
+			importInfo.setProblemOccured(true);
 		} catch (SAXException f) {
-			// not wellformed !
-			// TODO ###########
+			importInfo.setWellformed(false);
+			importInfo.setProblemOccured(true);
 		}
-		// get the login bean from the session
-		// LoginBean loginBean =
-		// (LoginBean)request.getSession(true).getAttribute(Constants.
-		// PARAM_LOGIN_BEAN);
-		// String supplier = loginBean.getUserName();
 		// Start parsing the file and search for articles to save in the databse
-		MyBMEcatParser parser = new MyBMEcatParser(document);
+		MyBMEcatParser parser = new MyBMEcatParser(document, importInfo);
 		parser.start();
 
 		// Set a session attribute with key=store_catalog and value the
 		// MyBMEcatParser instance to be able to use its variables via jsp
-		request.getSession(true).setAttribute(Constants.ACTION_STORE_CATALOG, parser);
+		request.getSession(true).setAttribute(Constants.ACTION_STORE_CATALOG, importInfo);
 
 		return "importCatalogResult.jsp";
 	}
