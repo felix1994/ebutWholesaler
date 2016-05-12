@@ -30,7 +30,6 @@ public class XPathMethods {
 		}
 
 		int ean = Integer.parseInt(materialNumber.getFirstChild().getNodeValue());
-		int x = 4;
 		return ean;
 	}
 
