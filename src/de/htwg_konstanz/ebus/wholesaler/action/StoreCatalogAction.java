@@ -35,6 +35,12 @@ public class StoreCatalogAction implements IAction {
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response, ArrayList<String> errorList) {
 
+		// Set a session attribute with key=store_catalog and value the
+		// ImportInformation instance to be able to use its variables via jsp
+		// Initialize ImportInfo class
+		importInfo = new ImportInformation();
+		request.getSession(true).setAttribute(Constants.ACTION_STORE_CATALOG, importInfo);
+
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
@@ -50,9 +56,6 @@ public class StoreCatalogAction implements IAction {
 			request.setAttribute("message", "There was an error: " + ex.getMessage());
 		}
 
-		// Initialize ImportInfo class
-		importInfo = new ImportInformation();
-
 		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = null;
 		Document document = null;
@@ -63,17 +66,15 @@ public class StoreCatalogAction implements IAction {
 		} catch (ParserConfigurationException | IOException e) {
 			importInfo.setIoException(true);
 			importInfo.setProblemOccured(true);
+			return "importCatalogResult.jsp";
 		} catch (SAXException f) {
 			importInfo.setWellformed(false);
 			importInfo.setProblemOccured(true);
+			return "importCatalogResult.jsp";
 		}
 		// Start parsing the file and search for articles to save in the databse
 		MyBMEcatParser parser = new MyBMEcatParser(document, importInfo);
 		parser.start();
-
-		// Set a session attribute with key=store_catalog and value the
-		// MyBMEcatParser instance to be able to use its variables via jsp
-		request.getSession(true).setAttribute(Constants.ACTION_STORE_CATALOG, importInfo);
 
 		return "importCatalogResult.jsp";
 	}

@@ -40,6 +40,7 @@
 				    <p>${importInfo.articlesFound}</p>
 				    <p>Number of articles added to our database: </p>
 				    <p>${importInfo.articlesAddedToDatabase}</p>
+				    <p>${importInfo.productsUpdated} products has been updated</p>
 		 		</c:otherwise>
 		 	</c:choose>
  		</c:otherwise>

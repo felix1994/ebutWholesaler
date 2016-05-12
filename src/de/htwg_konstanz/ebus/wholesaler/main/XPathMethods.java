@@ -100,4 +100,67 @@ public class XPathMethods {
 		return shortDescrNode.getFirstChild().getNodeValue();
 	}
 
+	public static String getSupplierAid(Node node) {
+		String expression = "SUPPLIER_AID[1]";
+		Node supplierAidNode = null;
+		try {
+			supplierAidNode = (Node) xpath.evaluate(expression, node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return supplierAidNode.getFirstChild().getNodeValue();
+	}
+
+	public static String getOrderNumber(Node node) {
+		String supplier_aid = getSupplierAid(node);
+		// To get the Header and the supplier name
+		String supplier = getSupplier(node.getParentNode().getParentNode()).getCompanyname();
+		String orderNumber = supplier_aid + supplier;
+		return orderNumber;
+	}
+
+	public static NodeList getCountry(Node node) {
+		String expression = "ARTICLE_PRICE_DETAILS/ARTICLE_PRICE";
+		NodeList articlePrices = null;
+		try {
+			articlePrices = (NodeList) xpath.evaluate(expression, node, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return articlePrices;
+	}
+
+	public static NodeList getTerritories(Node node) {
+		String expression = "TERRITORY";
+		NodeList territories = null;
+		try {
+			territories = (NodeList) xpath.evaluate(expression, node, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return territories;
+	}
+
+	public static double getPriceAmount(Node node) {
+		String expression = "PRICE_AMOUNT";
+		Node priceAmount = null;
+		try {
+			priceAmount = (Node) xpath.evaluate(expression, node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return Double.parseDouble(priceAmount.getFirstChild().getNodeValue());
+	}
+
+	public static double getTax(Node node) {
+		String expression = "TAX";
+		Node tax = null;
+		try {
+			tax = (Node) xpath.evaluate(expression, node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return Double.parseDouble(tax.getFirstChild().getNodeValue());
+	}
+
 }

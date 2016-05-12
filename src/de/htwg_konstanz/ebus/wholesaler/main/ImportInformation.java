@@ -9,6 +9,7 @@ public class ImportInformation {
 	private boolean ioException;
 	private boolean supplierFound;
 	private boolean problemOccured;
+	private int productsUpdated;
 
 	public ImportInformation() {
 		this.articlesFound = 0;
@@ -18,6 +19,15 @@ public class ImportInformation {
 		this.ioException = false;
 		this.supplierFound = true;
 		this.problemOccured = false;
+		this.productsUpdated = 0;
+	}
+
+	public int getProductsUpdated() {
+		return productsUpdated;
+	}
+
+	public void addOneToProductsUpdated() {
+		productsUpdated++;
 	}
 
 	public boolean isProblemOccured() {
