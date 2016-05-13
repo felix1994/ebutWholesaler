@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,8 +25,8 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 public class MyBMEcatBuilder {
 
-	public void start(String searchstring) {
-
+	public DOMSource start(String searchstring, String outputtype) {
+		System.err.println("IM here");
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
@@ -143,13 +144,23 @@ public class MyBMEcatBuilder {
 			}
 
 			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Transformer t = tFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("/Users/Felix/Desktop/result.xml"));
-			t.transform(source, result);
 
-			StreamResult consoleResult = new StreamResult(System.out);
-			t.transform(source, consoleResult);
+			if ("xml".equals(outputtype)) {
+				StreamResult result = new StreamResult(new File("/Users/Felix/Desktop/result.xml"));
+				Transformer t = tFactory.newTransformer();
+				t.transform(source, result);
+
+				StreamResult consoleResult = new StreamResult(System.out);
+				t.transform(source, consoleResult);
+				return source;
+			}
+			if ("xhtml".equals(outputtype)) {
+				StreamResult result = new StreamResult(new File("/Users/Felix/Desktop/result.html"));
+				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML(1).xsl"));
+				t.transform(source, result);
+				return source;
+			}
 
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -161,6 +172,7 @@ public class MyBMEcatBuilder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 
 	}
 
