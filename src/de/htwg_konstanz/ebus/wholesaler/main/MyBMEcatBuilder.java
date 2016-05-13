@@ -24,7 +24,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 public class MyBMEcatBuilder {
 
-	public void start() {
+	public void start(String searchstring) {
 
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -74,6 +74,12 @@ public class MyBMEcatBuilder {
 
 			ProductBOA pboa = ProductBOA.getInstance();
 			List<BOProduct> articles = pboa.findAll();
+
+			// If the user wants to export some products via entering a
+			// searchstring
+			String search = "%" + searchstring + "%";
+			if (!searchstring.equals("fullcatalog"))
+				articles = pboa.findByShortdescriptionLike(search);
 
 			for (BOProduct a : articles) {
 				Element article = doc.createElement("ARTICLE");
