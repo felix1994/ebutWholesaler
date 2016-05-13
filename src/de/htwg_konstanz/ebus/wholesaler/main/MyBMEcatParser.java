@@ -72,7 +72,16 @@ public class MyBMEcatParser {
 			try {
 				BOProduct article = new BOProduct();
 				Node articleNode = articles.item(i);
-				article.setOrderNumberSupplier(XPathMethods.getOrderNumber(articleNode));
+				String orderNumber = XPathMethods.getOrderNumber(articleNode);
+				// Ordernumber is concatenation of supplier_aid + suppliername,
+				// if no supplier was found no ordernumber could be created ->
+				// null
+				if (orderNumber == null) {
+					importInfo.setProblemOccured(true);
+					importInfo.setSupplierFound(false);
+					return;
+				}
+				article.setOrderNumberSupplier(orderNumber);
 				article.setShortDescription(XPathMethods.getShortdescription(articleNode));
 				article.setOrderNumberCustomer(XPathMethods.getOrderNumber(articleNode));
 				BOSupplier supplier = XPathMethods.getSupplier(document.getDocumentElement());
@@ -103,7 +112,7 @@ public class MyBMEcatParser {
 				}
 
 			} catch (ConstraintViolationException e) {
-				// TODO
+				// TODO Database error :(
 			}
 
 		}

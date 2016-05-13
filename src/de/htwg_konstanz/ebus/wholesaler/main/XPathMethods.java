@@ -113,7 +113,10 @@ public class XPathMethods {
 	public static String getOrderNumber(Node node) {
 		String supplier_aid = getSupplierAid(node);
 		// To get the Header and the supplier name
-		String supplier = getSupplier(node.getParentNode().getParentNode()).getCompanyname();
+		BOSupplier bosupplier = getSupplier(node.getParentNode().getParentNode());
+		if (bosupplier == null)
+			return null;
+		String supplier = bosupplier.getCompanyname();
 		String orderNumber = supplier_aid + supplier;
 		return orderNumber;
 	}
