@@ -25,8 +25,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 public class MyBMEcatBuilder {
 
-	public DOMSource start(String searchstring, String outputtype) {
-		System.err.println("IM here");
+	public Object start(String searchstring, String outputtype) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
@@ -156,10 +155,11 @@ public class MyBMEcatBuilder {
 				return source;
 			}
 			if ("xhtml".equals(outputtype)) {
-				StreamResult result = new StreamResult(new File("/Users/Felix/Desktop/result.html"));
+				File f = new File("/Users/Felix/Desktop/result.html");
+				StreamResult result = new StreamResult(f);
 				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML(1).xsl"));
 				t.transform(source, result);
-				return source;
+				return f;
 			}
 
 		} catch (ParserConfigurationException e) {

@@ -20,7 +20,6 @@ public class CreateXML implements IAction {
 		MyBMEcatBuilder builder = new MyBMEcatBuilder();
 		String searchString = request.getParameter("searchstring");
 		String outputtype = request.getParameter("outputtype");
-		System.out.println(outputtype);
 		if (searchString == null)
 			return null;
 		if (searchString.equals("fullcatalog"))

@@ -10,6 +10,7 @@ public class ImportInformation {
 	private boolean supplierFound;
 	private boolean problemOccured;
 	private int productsUpdated;
+	private boolean fileChosen;
 
 	public ImportInformation() {
 		this.articlesFound = 0;
@@ -20,6 +21,15 @@ public class ImportInformation {
 		this.supplierFound = true;
 		this.problemOccured = false;
 		this.productsUpdated = 0;
+		this.fileChosen = true;
+	}
+
+	public boolean isFileChosen() {
+		return fileChosen;
+	}
+
+	public void setFileChosen(boolean fileChosen) {
+		this.fileChosen = fileChosen;
 	}
 
 	public int getProductsUpdated() {

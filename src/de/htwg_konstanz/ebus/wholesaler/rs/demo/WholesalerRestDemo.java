@@ -1,5 +1,7 @@
 package de.htwg_konstanz.ebus.wholesaler.rs.demo;
 
+import java.io.File;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -48,16 +50,9 @@ public class WholesalerRestDemo {
 		return Response.status(200).entity(output).build();
 	}
 
-	public Response createXML(String searchstring) {
-		MyBMEcatBuilder builder = new MyBMEcatBuilder();
-		ResponseBuilder response = Response.ok((Object) builder.start(searchstring, "xml"));
-		response.header("Content-Disposition", "attachment; filename=\"exported_products.xml\"");
-		return response.build();
-	}
-
 	@GET
 	@Path("/createoutput")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_HTML })
+	@Produces({ MediaType.APPLICATION_XHTML_XML })
 	public Response createOutput(@Context UriInfo uriinfo, @QueryParam("outputtype") String outputtype,
 			@QueryParam("searchstring") String searchstring) {
 		if (searchstring.length() == 0 || searchstring == null)
@@ -71,7 +66,21 @@ public class WholesalerRestDemo {
 
 	private Response createXHTML(String searchstring) {
 		MyBMEcatBuilder builder = new MyBMEcatBuilder();
-		ResponseBuilder response = Response.ok((Object) builder.start(searchstring, "xhtml"));
+		// ResponseBuilder response = Response.ok((File)
+		// builder.start(searchstring, "xhtml"));
+		// response.header("Content-Disposition", "attachment;
+		// filename=\"exported_products.html\"");
+
+		return Response.ok((File) builder.start(searchstring, "xhtml"), MediaType.APPLICATION_OCTET_STREAM)
+				.header("Content-Disposition", "attachment; filename=\"exported_products.html\"") // optional
+				.build();
+		// return response.build();
+	}
+
+	public Response createXML(String searchstring) {
+		MyBMEcatBuilder builder = new MyBMEcatBuilder();
+		ResponseBuilder response = Response.ok((Object) builder.start(searchstring, "xml"));
+		response.header("Content-Disposition", "attachment; filename=\"exported_products.xml\"");
 		return response.build();
 	}
 

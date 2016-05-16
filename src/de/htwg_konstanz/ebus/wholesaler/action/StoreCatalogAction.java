@@ -52,6 +52,11 @@ public class StoreCatalogAction implements IAction {
 			List<FileItem> formItems = upload.parseRequest(request);
 			FileItem fileItem = formItems.get(0);
 			stream = fileItem.getInputStream();
+			if (stream.available() == 0) {
+				importInfo.setFileChosen(false);
+			}
+		} catch (IndexOutOfBoundsException e) {
+			importInfo.setFileChosen(false);
 		} catch (Exception ex) {
 			request.setAttribute("message", "There was an error: " + ex.getMessage());
 		}
