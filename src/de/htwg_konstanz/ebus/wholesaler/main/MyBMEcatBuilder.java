@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -158,6 +159,7 @@ public class MyBMEcatBuilder {
 				File f = new File("/Users/Felix/Desktop/result.html");
 				StreamResult result = new StreamResult(f);
 				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML(1).xsl"));
+				t.setOutputProperty(OutputKeys.METHOD, "xml");
 				t.transform(source, result);
 				return f;
 			}
