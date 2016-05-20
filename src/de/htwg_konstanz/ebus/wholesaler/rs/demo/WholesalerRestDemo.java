@@ -14,7 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.transform.dom.DOMSource;
 
+import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 import de.htwg_konstanz.ebus.wholesaler.main.MyBMEcatBuilder;
 
 @Path("/hello")
@@ -56,8 +58,8 @@ public class WholesalerRestDemo {
 	public Response createOutput(@Context UriInfo uriinfo, @QueryParam("outputtype") String outputtype,
 			@QueryParam("searchstring") String searchstring) {
 		if (searchstring.length() == 0 || searchstring == null)
-			searchstring = "fullcatalog";
-		if ("xml".equals(outputtype)) {
+			searchstring = Constants.FULLCATALOG;
+		if (Constants.XML.equals(outputtype)) {
 			return createXML(searchstring);
 		} else {
 			return createXHTML(searchstring);
@@ -71,7 +73,7 @@ public class WholesalerRestDemo {
 		// response.header("Content-Disposition", "attachment;
 		// filename=\"exported_products.html\"");
 
-		return Response.ok((File) builder.start(searchstring, "xhtml"), MediaType.APPLICATION_OCTET_STREAM)
+		return Response.ok((File) builder.start(searchstring, Constants.XHTML), MediaType.APPLICATION_OCTET_STREAM)
 				.header("Content-Disposition", "attachment; filename=\"exported_products.html\"") // optional
 				.build();
 		// return response.build();
@@ -79,7 +81,7 @@ public class WholesalerRestDemo {
 
 	public Response createXML(String searchstring) {
 		MyBMEcatBuilder builder = new MyBMEcatBuilder();
-		ResponseBuilder response = Response.ok((Object) builder.start(searchstring, "xml"));
+		ResponseBuilder response = Response.ok((DOMSource) builder.start(searchstring, Constants.XML));
 		response.header("Content-Disposition", "attachment; filename=\"exported_products.xml\"");
 		return response.build();
 	}

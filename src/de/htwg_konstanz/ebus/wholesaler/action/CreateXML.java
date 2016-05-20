@@ -22,8 +22,8 @@ public class CreateXML implements IAction {
 		String outputtype = request.getParameter("outputtype");
 		if (searchString == null)
 			return null;
-		if (searchString.equals("fullcatalog"))
-			builder.start("fullcatalog", outputtype);
+		if (searchString.equals(Constants.FULLCATALOG))
+			builder.start(Constants.FULLCATALOG, outputtype);
 		else
 			builder.start(searchString, outputtype);
 

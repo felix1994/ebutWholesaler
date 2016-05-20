@@ -1,6 +1,12 @@
 package de.htwg_konstanz.ebus.wholesaler.demo.util;
 
 public class Constants {
+
+	public static final String ENCODING_UTF_8 = "utf-8";
+	public static final String XML_VERSION_1_0 = "1.0";
+	public static final String FULLCATALOG = "fullcatalog";
+	public static final String XML = "xml";
+	public static final String XHTML = "xhtml";
 	public static final String ACTION_IMPORT = "import";
 	public static final String ACTION_EXPORT = "export";
 	public static final String ACTION_STORE_CATALOG = "store_catalog";

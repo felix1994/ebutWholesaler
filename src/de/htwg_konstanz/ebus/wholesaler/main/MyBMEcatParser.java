@@ -30,8 +30,8 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa._BaseBOA;
 
 public class MyBMEcatParser {
 
+	private static final double MARGE = 1.2;
 	private Document document;
-	// private ProductBOA pboa;
 	private ImportInformation importInfo;
 
 	public MyBMEcatParser(Document doc, ImportInformation importInfo) {
@@ -148,7 +148,7 @@ public class MyBMEcatParser {
 				// - LowerboundScaledprice
 				double priceAmount = XPathMethods.getPriceAmount(articlePrice);
 				double tax = XPathMethods.getTax(articlePrice);
-				BigDecimal priceAmount2 = BigDecimal.valueOf(priceAmount * 1.2);
+				BigDecimal priceAmount2 = BigDecimal.valueOf(priceAmount * MARGE);
 				BigDecimal tax2 = BigDecimal.valueOf(tax);
 				BOSalesPrice salesPrice = new BOSalesPrice(priceAmount2, tax2, "net_list");
 				salesPrice.setProduct(article);
