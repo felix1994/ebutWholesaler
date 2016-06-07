@@ -165,4 +165,11 @@ public class XPathMethods {
 		return Double.parseDouble(tax.getFirstChild().getNodeValue());
 	}
 
+	public static String getOrderNumberSupplier(Node node) {
+		String supplier_aid = getSupplierAid(node);
+		if (supplier_aid == null)
+			return "null";
+		return supplier_aid;
+	}
+
 }

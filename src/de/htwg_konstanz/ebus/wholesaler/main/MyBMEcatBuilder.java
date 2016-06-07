@@ -68,7 +68,7 @@ public class MyBMEcatBuilder {
 
 			// ? Pflichtfeld! Sind wir der Supplier? --> Konstant setzen?
 			Element supplier_name = doc.createElement("SUPPLIER_NAME");
-			supplier_name.appendChild(doc.createTextNode("Supplier"));
+			supplier_name.appendChild(doc.createTextNode("Tandem 23"));
 			supplier.appendChild(supplier_name);
 
 			Element t_new_catalog = doc.createElement("T_NEW_CATALOG");
@@ -89,7 +89,7 @@ public class MyBMEcatBuilder {
 
 				Element supplier_aid = doc.createElement("SUPPLIER_AID");
 				// OrderNumberSupplier muss aufgesplittet werden --> wie?!
-				String s_aid = a.getOrderNumberSupplier();
+				String s_aid = a.getOrderNumberCustomer();
 				supplier_aid.appendChild(doc.createTextNode(s_aid));
 				article.appendChild(supplier_aid);
 
