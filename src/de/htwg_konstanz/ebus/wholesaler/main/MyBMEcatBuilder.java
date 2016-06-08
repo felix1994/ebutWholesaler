@@ -23,6 +23,7 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOCountry;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSalesPrice;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
+import de.htwg_konstanz.ebus.wholesaler.demo.util.Constants;
 
 public class MyBMEcatBuilder {
 
@@ -67,7 +68,7 @@ public class MyBMEcatBuilder {
 
 			// ? Pflichtfeld! Sind wir der Supplier? --> Konstant setzen?
 			Element supplier_name = doc.createElement("SUPPLIER_NAME");
-			supplier_name.appendChild(doc.createTextNode("Supplier"));
+			supplier_name.appendChild(doc.createTextNode("Tandem 23"));
 			supplier.appendChild(supplier_name);
 
 			Element t_new_catalog = doc.createElement("T_NEW_CATALOG");
@@ -88,7 +89,7 @@ public class MyBMEcatBuilder {
 
 				Element supplier_aid = doc.createElement("SUPPLIER_AID");
 				// OrderNumberSupplier muss aufgesplittet werden --> wie?!
-				String s_aid = a.getOrderNumberSupplier();
+				String s_aid = a.getOrderNumberCustomer();
 				supplier_aid.appendChild(doc.createTextNode(s_aid));
 				article.appendChild(supplier_aid);
 
@@ -146,7 +147,7 @@ public class MyBMEcatBuilder {
 			TransformerFactory tFactory = TransformerFactory.newInstance();
 			DOMSource source = new DOMSource(doc);
 
-			if ("xml".equals(outputtype)) {
+			if (Constants.XML.equals(outputtype)) {
 				StreamResult result = new StreamResult(new File("/Users/Felix/Desktop/result.xml"));
 				Transformer t = tFactory.newTransformer();
 				t.transform(source, result);
@@ -155,11 +156,13 @@ public class MyBMEcatBuilder {
 				t.transform(source, consoleResult);
 				return source;
 			}
-			if ("xhtml".equals(outputtype)) {
+			if (Constants.XHTML.equals(outputtype)) {
 				File f = new File("/Users/Felix/Desktop/result.html");
 				StreamResult result = new StreamResult(f);
 				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML(1).xsl"));
-				t.setOutputProperty(OutputKeys.METHOD, "xml");
+				t.setOutputProperty(OutputKeys.METHOD, Constants.XML);
+				t.setOutputProperty(OutputKeys.VERSION, Constants.XML_VERSION_1_0);
+				t.setOutputProperty(OutputKeys.ENCODING, Constants.ENCODING_UTF_8);
 				t.transform(source, result);
 				return f;
 			}

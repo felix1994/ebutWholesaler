@@ -48,8 +48,8 @@
 			<div class="radio" style="text-indent:20px;">
 				<input type="radio" name="outputtype" value="xml">XML</input>
 			</div> 
-		 <div>Export some produts by entering your searchstring: (no input means complete export)</div>
-		  <input type="text" name="searchstring" class="form-control" placeholder="Enter your searchstring"/>
+		 <div>Export some produts by entering your searchstring(short-description): (no input means complete export)</div>
+		  <input type="text" name="searchstring" class="form-control" placeholder="Enter short description"/>
 		<button type="submit" class="btn btn-primary" value="export">Selective export</button>
 	</form>
 	</div>

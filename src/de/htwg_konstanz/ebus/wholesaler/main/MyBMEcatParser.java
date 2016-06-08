@@ -30,8 +30,8 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.boa._BaseBOA;
 
 public class MyBMEcatParser {
 
+	private static final double MARGE = 1.2;
 	private Document document;
-	// private ProductBOA pboa;
 	private ImportInformation importInfo;
 
 	public MyBMEcatParser(Document doc, ImportInformation importInfo) {
@@ -84,6 +84,7 @@ public class MyBMEcatParser {
 				article.setOrderNumberSupplier(orderNumber);
 				article.setShortDescription(XPathMethods.getShortdescription(articleNode));
 				article.setOrderNumberCustomer(XPathMethods.getOrderNumber(articleNode));
+				article.setOrderNumberSupplier(XPathMethods.getOrderNumberSupplier(articleNode));
 				BOSupplier supplier = XPathMethods.getSupplier(document.getDocumentElement());
 				if (supplier == null) {
 					importInfo.setSupplierFound(false);
@@ -103,11 +104,12 @@ public class MyBMEcatParser {
 						ProductBOA.getInstance().delete(product);
 						importInfo.addOneToProductsUpdated();
 						commit();
+					} else {
+						importInfo.addOneToArticlesAddedToDatabase();
 					}
 					// Save the Product to the database
 					ProductBOA.getInstance().saveOrUpdate(article);
 					commit();
-					importInfo.addOneToArticlesAddedToDatabase();
 					createPrice(article, articleNode);
 				}
 
@@ -148,7 +150,7 @@ public class MyBMEcatParser {
 				// - LowerboundScaledprice
 				double priceAmount = XPathMethods.getPriceAmount(articlePrice);
 				double tax = XPathMethods.getTax(articlePrice);
-				BigDecimal priceAmount2 = BigDecimal.valueOf(priceAmount * 1.2);
+				BigDecimal priceAmount2 = BigDecimal.valueOf(priceAmount * MARGE);
 				BigDecimal tax2 = BigDecimal.valueOf(tax);
 				BOSalesPrice salesPrice = new BOSalesPrice(priceAmount2, tax2, "net_list");
 				salesPrice.setProduct(article);
@@ -168,19 +170,47 @@ public class MyBMEcatParser {
 	 * @return the new orderNumberSupplier or "alreadyStored" if the article is
 	 *         already stored in the database
 	 */
-	private Integer checkIfArticleIsAlreadyStored(BOProduct article, Node articleNode) {
+	private Integer checkIfArticleIsAlreadyStored2(BOProduct article, Node articleNode) {
 		// Supplier AID + Supplier = orderNumberSupplier
-		Map<String, Integer> orderNumberSuppliers = new HashMap<String, Integer>();
+		Map<String, Integer> orderNumberCustomer = new HashMap<String, Integer>();
 		List<BOProduct> products = ProductBOA.getInstance().findAll();
 		for (BOProduct product : products) {
-			orderNumberSuppliers.put(product.getOrderNumberSupplier(), product.getMaterialNumber());
+			orderNumberCustomer.put(product.getOrderNumberCustomer(), product.getMaterialNumber());
 		}
 		String orderNumber = article.getOrderNumberCustomer();
 
-		if (orderNumberSuppliers.containsKey(orderNumber)) {
-			return orderNumberSuppliers.get(orderNumber);
+		if (orderNumberCustomer.containsKey(orderNumber)) {
+			return orderNumberCustomer.get(orderNumber);
 		} else
 			return -1;
+	}
+
+	private Integer checkIfArticleIsAlreadyStored(BOProduct article, Node articleNode) {
+		String artSupplier = article.getSupplier().getCompanyname();
+		String artOrderNumberSupplier = article.getOrderNumberSupplier();
+
+		// key supplier value ordernumber
+		Map<String, Map<String, Integer>> databaseValues = new HashMap<String, Map<String, Integer>>();
+		List<BOProduct> products = ProductBOA.getInstance().findAll();
+		for (BOProduct product : products) {
+			if (!databaseValues.containsKey(product.getSupplier().getCompanyname())) {
+				databaseValues.put(product.getSupplier().getCompanyname(), new HashMap<String, Integer>());
+				databaseValues.get(product.getSupplier().getCompanyname()).put(product.getOrderNumberSupplier(),
+						product.getMaterialNumber());
+			} else {
+				databaseValues.get(product.getSupplier().getCompanyname()).put(product.getOrderNumberSupplier(),
+						product.getMaterialNumber());
+			}
+		}
+
+		if (databaseValues.containsKey(artSupplier)) {
+			if (databaseValues.get(artSupplier).get(artOrderNumberSupplier) != null)
+				return databaseValues.get(artSupplier).get(artOrderNumberSupplier);
+			else
+				return -1;
+		} else {
+			return -1;
+		}
 	}
 
 }
