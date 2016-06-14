@@ -54,7 +54,7 @@ public class WholesalerRestDemo {
 
 	@GET
 	@Path("/createoutput")
-	@Produces({ MediaType.APPLICATION_XHTML_XML })
+	@Produces({ MediaType.APPLICATION_OCTET_STREAM })
 	public Response createOutput(@Context UriInfo uriinfo, @QueryParam("outputtype") String outputtype,
 			@QueryParam("searchstring") String searchstring) {
 		if (searchstring.length() == 0 || searchstring == null)
