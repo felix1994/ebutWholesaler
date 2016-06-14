@@ -41,13 +41,24 @@ public class ImportWebService {
 			importInfo.setProblemOccured(true);
 		}
 		// Start parsing the file and search for articles to save in the databse
-		MyBMEcatParser parser = new MyBMEcatParser(document, importInfo);
-		parser.start();
+		if (!importInfo.isProblemOccured()) {
+			MyBMEcatParser parser = new MyBMEcatParser(document, importInfo);
+			parser.start();
+		}
 
 		String result = "";
-		result += "Articles in your file: " + importInfo.getArticlesFound() + "\n";
-		result += "Articles added to db: " + importInfo.getArticlesAddedToDatabase() + "\n";
-		result += "Articles updated: " + importInfo.getProductsUpdated() + "\n";
+		if (importInfo.isProblemOccured()) {
+			if (!importInfo.isWellformed())
+				result += "NOT WELLFORMED";
+			if (!importInfo.isValid())
+				result += "NOT VALID";
+			if (!importInfo.isSupplierFound())
+				result += "SUPPLIER NOT FOUND IN DB";
+		} else {
+			result += "Articles in your file: " + importInfo.getArticlesFound() + "\n";
+			result += "Articles added to db: " + importInfo.getArticlesAddedToDatabase() + "\n";
+			result += "Articles updated: " + importInfo.getProductsUpdated() + "\n";
+		}
 		return Response.ok().entity(result).build();
 	}
 
