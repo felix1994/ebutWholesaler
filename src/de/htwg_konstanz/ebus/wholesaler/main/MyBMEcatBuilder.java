@@ -159,7 +159,7 @@ public class MyBMEcatBuilder {
 			if (Constants.XHTML.equals(outputtype)) {
 				File f = new File("/Users/Felix/Desktop/result.html");
 				StreamResult result = new StreamResult(f);
-				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML(1).xsl"));
+				Transformer t = tFactory.newTransformer(new StreamSource("/Users/Felix/Desktop/BMEcatToXHTML.xsl"));
 				t.setOutputProperty(OutputKeys.METHOD, Constants.XML);
 				t.setOutputProperty(OutputKeys.VERSION, Constants.XML_VERSION_1_0);
 				t.setOutputProperty(OutputKeys.ENCODING, Constants.ENCODING_UTF_8);
